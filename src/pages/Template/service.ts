@@ -1,7 +1,7 @@
 import request from 'umi-request';
 
-export async function queryFakeList(params: { count: number }) {
-  return request('/api/fake_list', {
+export async function queryList(params: { count: number }) {
+  return request('/api/templateCollections', {
     params,
   });
 }

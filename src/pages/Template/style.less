@@ -3,6 +3,7 @@
 
 .cardList {
   .card {
+    text-align: center;
     :global {
       .ant-card-meta-title {
         margin-bottom: 12px;
@@ -39,22 +40,20 @@
   }
 }
 
+.coverImg {
+  margin-top: 10px;
+  img {
+    object-fit: contain;
+    
+  }
+}
+
 .newButton {
   width: 100%;
-  height: 201px;
+  height: 228px;
   color: @text-color-secondary;
   background-color: @component-background;
   border-color: @border-color-base;
-}
-
-.cardAvatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 48px;
-}
-
-.cardDescription {
-  .textOverflowMulti();
 }
 
 .pageHeaderContent {

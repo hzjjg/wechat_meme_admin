@@ -5,7 +5,9 @@ export interface Member {
 }
 
 export interface CardListItemDataType {
-  id: string;
+  _id: string;
+  name: string;
+  coverUrl:string;
   owner: string;
   title: string;
   avatar: string;

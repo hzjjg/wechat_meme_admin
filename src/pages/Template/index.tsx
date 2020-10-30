@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, List, Typography } from 'antd';
+import { Button, Card, List, Typography, Image } from 'antd';
 import React, { Component } from 'react';
 
 import { PageContainer } from '@ant-design/pro-layout';
@@ -24,7 +24,7 @@ interface TemplateState {
 class Template extends Component<
   TemplateProps,
   TemplateState
-> {
+  > {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -44,8 +44,7 @@ class Template extends Component<
     const content = (
       <div className={styles.pageHeaderContent}>
         <p>
-          段落示意：蚂蚁金服务设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态，
-          提供跨越设计与开发的体验解决方案。
+          表情模板主题
         </p>
         <div className={styles.contentLink}>
           <a>
@@ -90,23 +89,16 @@ class Template extends Component<
             }}
             dataSource={[nullData, ...list]}
             renderItem={(item) => {
-              if (item && item.id) {
+              if (item && item._id) {
                 return (
-                  <List.Item key={item.id}>
+                  <List.Item key={item._id}>
                     <Card
                       hoverable
                       className={styles.card}
-                      actions={[<a key="option1">操作一</a>, <a key="option2">操作二</a>]}
+                      actions={[<a key="edit">编辑</a>]}
                     >
-                      <Card.Meta
-                        avatar={<img alt="" className={styles.cardAvatar} src={item.avatar} />}
-                        title={<a>{item.title}</a>}
-                        description={
-                          <Paragraph className={styles.item} ellipsis={{ rows: 3 }}>
-                            {item.description}
-                          </Paragraph>
-                        }
-                      />
+                      <div>{item.name}</div>
+                      <Image src={item.coverUrl} className={styles.coverImg} width={'100%'} height={100}></Image>
                     </Card>
                   </List.Item>
                 );
@@ -114,7 +106,7 @@ class Template extends Component<
               return (
                 <List.Item>
                   <Button type="dashed" className={styles.newButton}>
-                    <PlusOutlined /> 新增产品
+                    <PlusOutlined /> 新增模板主题
                   </Button>
                 </List.Item>
               );
