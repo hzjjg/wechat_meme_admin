@@ -10,7 +10,7 @@ export default defineConfig({
     hmr: true,
   },
   layout: {
-    name: 'Ant Design Pro',
+    name: '抽屉表情',
     locale: false,
     ...defaultSettings,
   },

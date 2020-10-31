@@ -1,14 +1,17 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, List, Typography, Image } from 'antd';
+import { Button, Card, List, Image, Modal, message } from 'antd';
 import React, { Component } from 'react';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { PageContainer } from '@ant-design/pro-layout';
 import { connect, Dispatch } from 'umi';
 import { StateType } from './model';
 import { CardListItemDataType } from './data.d';
 import styles from './style.less';
+import AddThemeDialog from './components/AddThemeDialog';
+import { addTheme, deleteTheme } from './service';
 
-const { Paragraph } = Typography;
+const { confirm } = Modal;
 
 interface TemplateProps {
   template: StateType;
@@ -16,21 +19,72 @@ interface TemplateProps {
   loading: boolean;
 }
 interface TemplateState {
-  visible: boolean;
-  done: boolean;
-  current?: Partial<CardListItemDataType>;
+  addDialogVisiable: boolean;
 }
 
-class Template extends Component<
-  TemplateProps,
-  TemplateState
-  > {
+class Template extends Component<TemplateProps, TemplateState> {
+
+  formRef: any = null;
+
+  constructor(props: TemplateProps) {
+    super(props)
+    this.state = {} as any
+  }
+
   componentDidMount() {
+    this.loadData()
+  }
+
+  loadData() {
     const { dispatch } = this.props;
     dispatch({
       type: 'template/fetch',
       payload: {
         count: 8,
+      },
+    });
+  }
+
+  handleAdd = () => {
+    this.setState({
+      addDialogVisiable: true
+    })
+  }
+
+  handleAddOk = async (data: any) => {
+    const response = await addTheme(data)
+    if (response.success) {
+      message.success('添加成功');
+      this.loadData()
+    }
+    console.log(response);
+    this.setState({ addDialogVisiable: false })
+  }
+
+  handleAddCancel = () => {
+    this.setState({ addDialogVisiable: false })
+  }
+
+  handleEdit = (id: string) => {
+    console.log('edit');
+  }
+
+  handleDelete = (id: string) => {
+    confirm({
+      title: '确定要删除此主题?',
+      icon: <ExclamationCircleOutlined />,
+      content: '删除后不可恢复',
+      onOk: async () => {
+        const response = await deleteTheme(id)
+        if (response.success) {
+          message.success('删除成功');
+          this.loadData()
+        } else {
+          message.success('删除失败');
+        }
+      },
+      onCancel() {
+        console.log('Cancel');
       },
     });
   }
@@ -46,20 +100,6 @@ class Template extends Component<
         <p>
           表情模板主题
         </p>
-        <div className={styles.contentLink}>
-          <a>
-            <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/MjEImQtenlyueSmVEfUD.svg" />{' '}
-            快速开始
-          </a>
-          <a>
-            <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/NbuDUAuBlIApFuDvWiND.svg" />{' '}
-            产品简介
-          </a>
-          <a>
-            <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/ohOEPSYdDTNnyMbGuyLb.svg" />{' '}
-            产品文档
-          </a>
-        </div>
       </div>
     );
 
@@ -95,7 +135,11 @@ class Template extends Component<
                     <Card
                       hoverable
                       className={styles.card}
-                      actions={[<a key="edit">编辑</a>]}
+                      actions={
+                        [
+                          <a key="edit" onClick={() => this.handleEdit(item._id)}>编辑</a>,
+                          <a key="delete" onClick={() => this.handleDelete(item._id)}>删除</a>
+                        ]}
                     >
                       <div>{item.name}</div>
                       <Image src={item.coverUrl} className={styles.coverImg} width={'100%'} height={100}></Image>
@@ -105,7 +149,7 @@ class Template extends Component<
               }
               return (
                 <List.Item>
-                  <Button type="dashed" className={styles.newButton}>
+                  <Button type="dashed" onClick={this.handleAdd} className={styles.newButton}>
                     <PlusOutlined /> 新增模板主题
                   </Button>
                 </List.Item>
@@ -113,6 +157,11 @@ class Template extends Component<
             }}
           />
         </div>
+        <AddThemeDialog
+          visible={this.state.addDialogVisiable}
+          onOk={this.handleAddOk}
+          onCancel={this.handleAddCancel}>
+        </AddThemeDialog>
       </PageContainer>
     );
   }

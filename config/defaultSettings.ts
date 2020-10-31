@@ -12,7 +12,7 @@ export default {
   menu: {
     locale: false,
   },
-  title: 'Ant Design Pro',
+  title: '抽屉表情',
   pwa: false,
   logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
