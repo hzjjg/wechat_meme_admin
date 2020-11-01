@@ -1,13 +1,13 @@
 import { Effect, Reducer } from 'umi';
 
 import { CardListItemDataType } from './data.d';
-import { queryFakeList } from './service';
+import { queryList } from './service';
 
 export interface StateType {
   list: CardListItemDataType[];
   pager: {
     page: number,
-    pageSize:number,
+    pageSize: number,
     total: number
   }
 }
@@ -37,8 +37,8 @@ const Model: ModelType = {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryFakeList, payload);
-      if(response.success){
+      const response = yield call(queryList, payload);
+      if (response.success) {
         yield put({
           type: 'queryList',
           payload: response.data,
@@ -57,8 +57,8 @@ const Model: ModelType = {
         list,
         pager: {
           total: Total,
-          page: Math.floor(Offset/Limit) + 1,
-          pageSize: Limit 
+          page: Math.floor(Offset / Limit) + 1,
+          pageSize: Limit
         } as any
       };
     },

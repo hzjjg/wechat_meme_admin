@@ -1,12 +1,16 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, List, Image, Pagination } from 'antd';
+import { Button, Card, List, Image, Pagination, Modal, message } from 'antd';
 import React, { Component } from 'react';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { PageContainer } from '@ant-design/pro-layout';
-import { connect, Dispatch } from 'umi';
+import { connect, Dispatch, Link, history } from 'umi';
 import { StateType } from './model';
 import { CardListItemDataType } from './data.d';
 import styles from './style.less';
+import { deleteTemplate } from './service';
+
+const { confirm } = Modal
 
 interface ListProps {
   templateAndList: StateType;
@@ -43,6 +47,38 @@ class TemplateList extends Component<
 
   handlePageChange = (page: number, pageSize?: number) => {
     this.loadData(page, pageSize)
+  }
+
+  handleDelete = (id: string) => {
+    const {
+      templateAndList: { pager },
+    } = this.props;
+    confirm({
+      title: '确定要删除此模板?',
+      icon: <ExclamationCircleOutlined />,
+      content: '删除后不可恢复',
+      onOk: async () => {
+        const response = await deleteTemplate(id)
+        if (response.success) {
+          message.success('删除成功');
+          this.loadData(pager.page, pager.pageSize)
+        } else {
+          message.success('删除失败');
+        }
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+  handleEdit = (id: string) => {
+    history.push({
+      pathname: '/template/edit',
+      query: {
+        id
+      },
+    });
   }
 
   render() {
@@ -99,7 +135,10 @@ class TemplateList extends Component<
                     <Card
                       hoverable
                       className={styles.card}
-                      actions={[<a key="option1">编辑</a>, <a key="option2">删除</a>]}
+                      actions={[
+                        <a onClick={() => this.handleEdit(item._id as string)}>编辑</a>,
+                        <a onClick={() => this.handleDelete(item._id as string)}>删除</a>
+                      ]}
                     >
                       <p className={styles.templateName}>{item.name || '---'}</p>
                       <Image src={item.url} className={styles.templateUrl} width={'100%'} height={100}></Image>
@@ -110,9 +149,11 @@ class TemplateList extends Component<
               }
               return (
                 <List.Item>
-                  <Button type="dashed" className={styles.newButton}>
-                    <PlusOutlined /> 新建模板
+                  <Link to="/template/add">
+                    <Button type="dashed" className={styles.newButton}>
+                      <PlusOutlined /> 新建模板
                   </Button>
+                  </Link>
                 </List.Item>
               );
             }}

@@ -80,8 +80,26 @@ export default defineConfig({
     {
       name: '模板',
       icon: 'smile',
-      path: '/tmeplate',
-      component: './Template/List',
+      path: '/template',
+      routes: [
+        {
+          path: '/template/list',
+          name: '模板列表',
+          icon: 'smile',
+          component: './Template/List',
+        },
+        {
+          path: '/template/add',
+          name: '新建模板',
+          icon: 'smile',
+          component: './Template/Edit',
+        },
+        {
+          path: '/template/edit',
+          icon: 'smile',
+          component: './Template/Edit',
+        },
+      ],
     },
     {
       component: './404',
