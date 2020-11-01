@@ -75,7 +75,13 @@ export default defineConfig({
       name: '模板主题',
       icon: 'smile',
       path: '/templatecollectionlist',
-      component: './Template',
+      component: './MemeTemplateTheme',
+    },
+    {
+      name: '模板',
+      icon: 'smile',
+      path: '/tmeplate',
+      component: './Template/List',
     },
     {
       component: './404',

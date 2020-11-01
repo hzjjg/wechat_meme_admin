@@ -6,10 +6,10 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import { connect, Dispatch } from 'umi';
 import { StateType } from './model';
-import { CardListItemDataType } from './data.d';
 import styles from './style.less';
 import AddThemeDialog from './components/AddThemeDialog';
 import { addTheme, deleteTheme } from './service';
+import { CardListItemDataType } from './data.d';
 
 const { confirm } = Modal;
 
