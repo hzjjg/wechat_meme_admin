@@ -57,8 +57,7 @@ const Model: ModelType = {
 
   reducers: {
     loadTemplate(state: any, action: any) {
-      console.log(action.payload);
-      const { template } = action.payload
+      const template = action.payload
       return {
         template,
         ...state,

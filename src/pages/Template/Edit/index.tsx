@@ -3,6 +3,7 @@ import { connect, Dispatch } from 'umi';
 import React, { FC, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import styles from './style.less';
+import TemplateImage from './components/TemplateImage';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -13,7 +14,7 @@ interface EditProps {
 }
 
 const Edit: FC<EditProps & any> = (props) => {
-  const { loading } = props;
+  const { loading, templateAndEdit } = props;
   const [form] = Form.useForm();
   const [id, setId] = useState('')
   const formItemLayout = {
@@ -133,6 +134,12 @@ const Edit: FC<EditProps & any> = (props) => {
             />
           </FormItem>
 
+          {templateAndEdit.template?.downloadUrl &&
+            <div className={styles.image}>
+              <TemplateImage templateData={templateAndEdit.template}></TemplateImage>
+            </div>
+          }
+
           <h3 className={styles.formTitle}>文本框设置</h3>
 
           <Row gutter={24}>
@@ -183,6 +190,13 @@ const Edit: FC<EditProps & any> = (props) => {
   );
 };
 
-export default connect(({ loading }: { loading: { models: { [key: string]: boolean } } }) => ({
+export default connect(({
+  loading,
+  templateAndEdit
+}: {
+  loading: { models: { [key: string]: boolean } },
+  templateAndEdit: any
+}) => ({
+  templateAndEdit,
   loading: loading.models.templateAndEdit,
 }))(Edit);
