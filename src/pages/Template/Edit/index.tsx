@@ -17,6 +17,8 @@ const Edit: FC<EditProps & any> = (props) => {
   const { loading, templateAndEdit } = props;
   const [form] = Form.useForm();
   const [id, setId] = useState('')
+  const [template, setTemplate] = useState({ ...templateAndEdit.template })
+
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -57,15 +59,14 @@ const Edit: FC<EditProps & any> = (props) => {
     console.log('Failed:', errorInfo);
   };
 
-  const onValuesChange = (changedValues: { [key: string]: any }) => {
+  const onValuesChange = () => {
+    setTemplate({ ...template, ...form.getFieldsValue() })
   };
 
   useEffect(() => {
     const { location: { query: { id } } } = props
     setId(id)
-    if (id) {
-      loadData(id)
-    }
+    if (id) loadData(id)
   }, []);
 
   async function loadData(id: string) {
@@ -74,7 +75,7 @@ const Edit: FC<EditProps & any> = (props) => {
       type: 'templateAndEdit/fetch',
       payload: id,
     });
-    console.log(data);
+    setTemplate(data)
     form.setFieldsValue(data)
   }
 
@@ -87,7 +88,6 @@ const Edit: FC<EditProps & any> = (props) => {
           style={{ marginTop: 8 }}
           form={form}
           name="basic"
-          initialValues={{ public: '1' }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           onValuesChange={onValuesChange}
@@ -134,9 +134,9 @@ const Edit: FC<EditProps & any> = (props) => {
             />
           </FormItem>
 
-          {templateAndEdit.template?.downloadUrl &&
+          {template?.downloadUrl &&
             <div className={styles.image}>
-              <TemplateImage templateData={templateAndEdit.template}></TemplateImage>
+              <TemplateImage templateData={template}></TemplateImage>
             </div>
           }
 
