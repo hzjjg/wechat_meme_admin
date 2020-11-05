@@ -1,4 +1,3 @@
-import { template } from 'lodash';
 import React, { useEffect, useState } from 'react'
 import styles from '../style.less';
 
@@ -7,16 +6,14 @@ type Props = {
 } & any
 
 const TemplateImage: React.FC<Props> = (props: Props) => {
-  console.log(props.templateData);
-
   const [imgSize, setImgSize] = useState({ width: 0, height: 0 })
-  const { downloadUrl, defaultContent = '', textStyle, textArea } = props.templateData
+  let { downloadUrl, defaultContent = '', textStyle, textArea } = JSON.parse(JSON.stringify(props.templateData))
   const canvasRef = React.createRef<HTMLCanvasElement>();
   let ctx: CanvasRenderingContext2D;
 
   useEffect(() => {
     draw()
-  }, [props.templateData, imgSize])
+  }, [props.templateData])
 
   function drawRect() {
     ctx.beginPath();
@@ -66,23 +63,24 @@ const TemplateImage: React.FC<Props> = (props: Props) => {
     }
   }
 
-  function draw() {
+  async function draw() {
     ctx = canvasRef.current?.getContext('2d') as CanvasRenderingContext2D;
-    setTimeout(() => {
-      ctx.clearRect(0, 0, imgSize.width, imgSize.height)
-      drawRect()
-      drawText()
-      loadImg()
-    });
+    await loadImg()
+    ctx.clearRect(0, 0, imgSize.width, imgSize.height)
+    drawRect()
+    drawText()
   }
 
   function loadImg() {
-    const img = new Image()
-    img.src = downloadUrl
-    img.onload = () => {
-      const { width, height } = img
-      setImgSize({ height, width })
-    }
+    return new Promise(resolve => {
+      const img = new Image()
+      img.src = downloadUrl
+      img.onload = () => {
+        const { width, height } = img
+        setImgSize({ height, width })
+        resolve()
+      }
+    })
 
   }
 

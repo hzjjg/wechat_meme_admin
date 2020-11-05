@@ -75,6 +75,8 @@ const Edit: FC<EditProps & any> = (props) => {
       type: 'templateAndEdit/fetch',
       payload: id,
     });
+    data.textStyle = { ...{ color: 'black', maxFontSize: 80 }, ...data.textStyle }
+    data.textArea = { ...{ x: 0, y: 0, w: 100, h: 30 }, ...data.textArea }
     setTemplate(data)
     form.setFieldsValue(data)
   }
@@ -145,22 +147,22 @@ const Edit: FC<EditProps & any> = (props) => {
           <Row gutter={24}>
             <Col span={3}>
               <FormItem label="宽" name={['textArea', 'w']}>
-                <InputNumber min={10}></InputNumber>
+                <InputNumber min={10} step={10}></InputNumber>
               </FormItem>
             </Col>
             <Col span={3}>
               <FormItem label="高" name={['textArea', 'h']}>
-                <InputNumber min={10}></InputNumber>
+                <InputNumber min={10} step={10}></InputNumber>
               </FormItem>
             </Col>
             <Col span={3}>
               <FormItem label="X轴" name={['textArea', 'x']}>
-                <InputNumber min={0}></InputNumber>
+                <InputNumber min={0} step={10}></InputNumber>
               </FormItem>
             </Col>
             <Col span={3}>
               <FormItem label="Y轴" name={['textArea', 'y']}>
-                <InputNumber min={0}></InputNumber>
+                <InputNumber min={0} step={10}></InputNumber>
               </FormItem>
             </Col>
           </Row>
@@ -170,12 +172,12 @@ const Edit: FC<EditProps & any> = (props) => {
           <Row gutter={24}>
             <Col span={3}>
               <FormItem label="颜色" name={['textStyle', 'color']}>
-                <Input min={10}></Input>
+                <Input></Input>
               </FormItem>
             </Col>
             <Col span={3}>
               <FormItem label="最大字体大小" name={['textStyle', 'maxFontSize']}>
-                <InputNumber min={10}></InputNumber>
+                <InputNumber min={10} step={5}></InputNumber>
               </FormItem>
             </Col>
           </Row>
